@@ -46,7 +46,7 @@ export default async function Hero() {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href="https://wa.me/919876543210?text=I%20want%20to%20know%20more%20about%20Sura%20Fitness%20coaching"
+                href="https://wa.me/918840723476?text=I%20want%20to%20know%20more%20about%20Sura%20Fitness%20coaching"
                 className="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 hover:scale-105 group"
               >
                 <svg className="w-5 h-5 mr-2 group-hover:animate-bounce-slow" fill="currentColor" viewBox="0 0 24 24">
