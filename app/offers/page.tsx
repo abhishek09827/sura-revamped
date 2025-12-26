@@ -44,7 +44,7 @@ export default async function OffersPage() {
                       </p>
                     )}
                     <a
-                      href={`https://wa.me/919876543210?text=I%20am%20interested%20in%20the%20${encodeURIComponent(offer.title)}%20offer`}
+                      href={`https://wa.me/918840723476?text=I%20am%20interested%20in%20the%20${encodeURIComponent(offer.title)}%20offer`}
                       className="inline-flex w-full items-center justify-center px-4 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition"
                     >
                       {offer.cta || "Claim Offer"}
