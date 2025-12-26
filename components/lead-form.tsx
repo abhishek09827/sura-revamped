@@ -152,7 +152,7 @@ export default function LeadForm() {
             <p className="text-center text-sm text-muted-foreground">
               Or reach us directly on{" "}
               <a
-                href="https://wa.me/919876543210"
+                href="https://wa.me/918840723476"
                 className="text-primary font-bold hover:text-accent transition-colors"
               >
                 WhatsApp
