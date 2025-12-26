@@ -74,7 +74,7 @@ export default function PolicyPage() {
                   hello@surafitness.com
                 </a>{" "}
                 or{" "}
-                <a href="https://wa.me/919876543210" className="text-primary font-semibold hover:underline">
+                <a href="https://wa.me/918840723476" className="text-primary font-semibold hover:underline">
                   WhatsApp
                 </a>
                 .
