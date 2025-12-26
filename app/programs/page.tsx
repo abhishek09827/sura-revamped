@@ -60,7 +60,7 @@ export default function ProgramsPage() {
                   <h3 className="text-xl font-bold text-foreground mb-3">{program.title}</h3>
                   <p className="text-muted-foreground leading-relaxed mb-6">{program.description}</p>
                   <a
-                    href="https://wa.me/919876543210?text=I%20want%20to%20know%20more%20about%20the%20{program.title}%20program"
+                    href="https://wa.me/918840723476?text=I%20want%20to%20know%20more%20about%20the%20{program.title}%20program"
                     className="inline-flex items-center text-primary font-semibold hover:text-primary/80 transition"
                   >
                     Enquire Now →
