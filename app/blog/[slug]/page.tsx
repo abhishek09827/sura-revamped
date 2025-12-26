@@ -53,7 +53,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               Get personalized fitness coaching to achieve your goals faster.
             </p>
             <a
-              href="https://wa.me/919876543210?text=I%20want%20to%20know%20more%20about%20Sura%20Fitness%20coaching"
+              href="https://wa.me/918840723476?text=I%20want%20to%20know%20more%20about%20Sura%20Fitness%20coaching"
               className="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition"
             >
               Enquire Now on WhatsApp
