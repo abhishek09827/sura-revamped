@@ -1,27 +1,73 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { createClient } from "@/lib/client"
+
+interface SuccessStory {
+  id: number
+  stat: string
+  label: string
+  icon: string
+}
 
 export default function SuccessStoriesAdmin() {
-  const [successStories, setSuccessStories] = useState([
-    { id: 1, stat: "500+", label: "Happy Clients", icon: "👥" },
-    { id: 2, stat: "95%", label: "Success Rate", icon: "📈" },
-    { id: 3, stat: "8+", label: "Years Experience", icon: "⭐" },
-  ])
-
+  const [successStories, setSuccessStories] = useState<SuccessStory[]>([])
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
   const [editingId, setEditingId] = useState<number | null>(null)
   const [formData, setFormData] = useState({ stat: "", label: "", icon: "" })
 
-  const handleEdit = (story: (typeof successStories)[0]) => {
+  useEffect(() => {
+    fetchSuccessStories()
+  }, [])
+
+  const fetchSuccessStories = async () => {
+    try {
+      setLoading(true)
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from("success_stories")
+        .select("*")
+        .order("id", { ascending: true })
+
+      if (error) throw error
+      setSuccessStories(data || [])
+    } catch (error) {
+      console.error("Error fetching success stories:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleEdit = (story: SuccessStory) => {
     setEditingId(story.id)
     setFormData({ stat: story.stat, label: story.label, icon: story.icon })
   }
 
-  const handleSave = () => {
-    if (editingId) {
-      setSuccessStories(successStories.map((story) => (story.id === editingId ? { ...story, ...formData } : story)))
-      setEditingId(null)
-      setFormData({ stat: "", label: "", icon: "" })
+  const handleSave = async () => {
+    if (editingId && formData.stat && formData.label && formData.icon) {
+      try {
+        setSaving(true)
+        const supabase = createClient()
+        const { error } = await supabase
+          .from("success_stories")
+          .update({
+            stat: formData.stat,
+            label: formData.label,
+            icon: formData.icon,
+          })
+          .eq("id", editingId)
+
+        if (error) throw error
+        await fetchSuccessStories()
+        setEditingId(null)
+        setFormData({ stat: "", label: "", icon: "" })
+      } catch (error) {
+        console.error("Error saving success story:", error)
+        alert("Failed to save changes. Please try again.")
+      } finally {
+        setSaving(false)
+      }
     }
   }
 
@@ -40,8 +86,13 @@ export default function SuccessStoriesAdmin() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid gap-6">
-          {successStories.map((story) => (
+        {loading ? (
+          <div className="text-center py-12 text-muted-foreground">Loading success stories...</div>
+        ) : successStories.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground">No success stories found.</div>
+        ) : (
+          <div className="grid gap-6">
+            {successStories.map((story) => (
             <div
               key={story.id}
               className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
@@ -90,9 +141,10 @@ export default function SuccessStoriesAdmin() {
                     </button>
                     <button
                       onClick={handleSave}
-                      className="px-6 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:shadow-lg hover:shadow-primary/30 transition"
+                      disabled={saving}
+                      className="px-6 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:shadow-lg hover:shadow-primary/30 transition disabled:opacity-50"
                     >
-                      Save Changes
+                      {saving ? "Saving..." : "Save Changes"}
                     </button>
                   </div>
                 </div>
@@ -114,8 +166,9 @@ export default function SuccessStoriesAdmin() {
                 </div>
               )}
             </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Instructions */}
         <div className="mt-12 p-6 rounded-2xl bg-primary/5 border border-primary/20">

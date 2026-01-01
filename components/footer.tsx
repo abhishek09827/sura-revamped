@@ -20,7 +20,7 @@ export default function Footer() {
               personalized guidance.
             </p>
             <div className="flex gap-3 pt-2">
-              <a
+              {/* <a
                 href="#"
                 className="w-10 h-10 rounded-lg bg-white/10 hover:bg-accent/30 transition-all duration-300 flex items-center justify-center text-lg hover:scale-110"
                 aria-label="Facebook"
@@ -40,7 +40,7 @@ export default function Footer() {
                 aria-label="YouTube"
               >
                 🎬
-              </a>
+              </a> */}
             </div>
           </div>
 
@@ -95,10 +95,10 @@ export default function Footer() {
                   className="text-primary-foreground/80 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                 >
                   <span className="text-lg">📱</span>
-                  <span>+91 9876543210</span>
+                  <span>+91 8840723476</span>
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a
                   href="mailto:hello@surafitness.com"
                   className="text-primary-foreground/80 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
@@ -106,10 +106,10 @@ export default function Footer() {
                   <span className="text-lg">✉️</span>
                   <span>hello@surafitness.com</span>
                 </a>
-              </li>
+              </li> */}
               <li className="text-primary-foreground/80 flex items-center gap-2">
                 <span className="text-lg">📍</span>
-                Mumbai, India
+                India
               </li>
               <li className="pt-2">
                 <a
