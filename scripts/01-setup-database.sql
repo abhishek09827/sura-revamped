@@ -71,6 +71,26 @@ CREATE TABLE IF NOT EXISTS leads (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS dashboard_stats (
+  id BIGINT PRIMARY KEY DEFAULT 1,
+  total_leads INTEGER,
+  active_clients INTEGER,
+  blog_posts INTEGER,
+  testimonials INTEGER,
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  CONSTRAINT dashboard_stats_single_row CHECK (id = 1)
+);
+
+CREATE TABLE IF NOT EXISTS homepage_banner_offer (
+  id BIGINT PRIMARY KEY DEFAULT 1,
+  title TEXT NOT NULL DEFAULT 'Limited Time Offer',
+  description TEXT NOT NULL,
+  cta_text TEXT DEFAULT 'Claim Offer',
+  is_active BOOLEAN DEFAULT TRUE,
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  CONSTRAINT homepage_banner_offer_single_row CHECK (id = 1)
+);
+
 -- Enable RLS
 ALTER TABLE success_stories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE programs ENABLE ROW LEVEL SECURITY;
@@ -79,6 +99,8 @@ ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
 ALTER TABLE offers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE blogs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE dashboard_stats ENABLE ROW LEVEL SECURITY;
+ALTER TABLE homepage_banner_offer ENABLE ROW LEVEL SECURITY;
 
 -- Public read access
 CREATE POLICY "Allow public read on success_stories" ON success_stories FOR SELECT USING (true);
@@ -105,12 +127,27 @@ CREATE POLICY "Allow authenticated insert on blogs" ON blogs FOR INSERT TO authe
 CREATE POLICY "Allow authenticated update on blogs" ON blogs FOR UPDATE TO authenticated USING (true);
 CREATE POLICY "Allow authenticated delete on blogs" ON blogs FOR DELETE TO authenticated USING (true);
 
+CREATE POLICY "Allow authenticated insert on success_stories" ON success_stories FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "Allow authenticated update on success_stories" ON success_stories FOR UPDATE TO authenticated USING (true);
+CREATE POLICY "Allow authenticated delete on success_stories" ON success_stories FOR DELETE TO authenticated USING (true);
+
 -- Public insert access for leads (form submissions)
 CREATE POLICY "Allow public insert on leads" ON leads FOR INSERT WITH CHECK (true);
 -- Admin read/update access for leads
 CREATE POLICY "Allow authenticated read on leads" ON leads FOR SELECT TO authenticated USING (true);
 CREATE POLICY "Allow authenticated update on leads" ON leads FOR UPDATE TO authenticated USING (true);
 CREATE POLICY "Allow authenticated delete on leads" ON leads FOR DELETE TO authenticated USING (true);
+
+-- Dashboard stats access
+CREATE POLICY "Allow public read on dashboard_stats" ON dashboard_stats FOR SELECT USING (true);
+CREATE POLICY "Allow authenticated update on dashboard_stats" ON dashboard_stats FOR UPDATE TO authenticated USING (true);
+CREATE POLICY "Allow authenticated insert on dashboard_stats" ON dashboard_stats FOR INSERT TO authenticated WITH CHECK (true);
+
+-- Homepage banner offer access
+CREATE POLICY "Allow public read on homepage_banner_offer" ON homepage_banner_offer FOR SELECT USING (is_active = true);
+CREATE POLICY "Allow authenticated read on homepage_banner_offer" ON homepage_banner_offer FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Allow authenticated update on homepage_banner_offer" ON homepage_banner_offer FOR UPDATE TO authenticated USING (true);
+CREATE POLICY "Allow authenticated insert on homepage_banner_offer" ON homepage_banner_offer FOR INSERT TO authenticated WITH CHECK (true);
 
 -- Seed data
 INSERT INTO success_stories (stat, label, icon) VALUES
@@ -139,6 +176,16 @@ INSERT INTO offers (title, description, details, valid_till, cta, is_active) VAL
 ('Referral Bonus', 'Earn rewards for bringing friends', '₹2000 credit for each successful referral', '2025-12-31', 'Refer Now', true),
 ('3-Month Commitment', 'Serious about transformation', '25% discount + priority coach access', '2025-03-31', 'Join Now', true),
 ('Annual Plan', 'Best value for committed members', '35% off annual rate + 2 free sessions', '2025-03-31', 'Subscribe', true);
+
+-- Initialize dashboard stats with NULL values (will use actual counts as fallback)
+INSERT INTO dashboard_stats (id, total_leads, active_clients, blog_posts, testimonials) VALUES
+(1, NULL, NULL, NULL, NULL)
+ON CONFLICT (id) DO NOTHING;
+
+-- Initialize homepage banner offer
+INSERT INTO homepage_banner_offer (id, title, description, cta_text, is_active) VALUES
+(1, 'Limited Time Offer', 'Get 30% off your first month - No hidden charges, cancel anytime', 'Claim Offer', true)
+ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO blogs (slug, title, excerpt, content, author, image, date, read_time, status) VALUES
 ('beginner-fitness-tips', '5 Essential Tips for Beginners Starting a Fitness Journey', 'Learn the fundamentals that every beginner needs to know before starting their fitness journey.', '<h2>Start Strong with These Fundamentals</h2><p>Beginning a fitness journey can feel overwhelming. Here are five essential tips to help you succeed:</p><h3>1. Start Slow and Build Consistency</h3><p>Don''t jump into intense workouts immediately. Begin with manageable exercises and gradually increase intensity. Consistency matters more than intensity.</p><h3>2. Find an Activity You Enjoy</h3><p>You''re more likely to stick with something you enjoy. Whether it''s walking, dancing, swimming, or gym training, pick what makes you happy.</p><h3>3. Prioritize Recovery</h3><p>Rest days are when your body adapts and grows stronger. Aim for 7-9 hours of sleep and take at least 2 rest days per week.</p><h3>4. Focus on Nutrition</h3><p>You can''t out-exercise a poor diet. Eat whole foods, stay hydrated, and ensure adequate protein intake for muscle recovery.</p><h3>5. Set Realistic Goals</h3><p>Don''t expect instant results. Set SMART goals (Specific, Measurable, Achievable, Relevant, Time-bound) and celebrate small wins along the way.</p>', 'Sura Fitness Team', '/fitness-beginner-tips.jpg', '2025-01-15', '5 min read', 'Published'),
