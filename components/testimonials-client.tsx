@@ -66,7 +66,11 @@ export default function TestimonialsClient({ testimonials }: { testimonials: Tes
                 </div>
                 <p className="text-foreground/90 leading-relaxed mb-6 italic">"{testimonial.text}"</p>
                 <div className="flex items-center gap-3 pt-6 border-t border-primary/10">
-                  <div className="text-3xl">{testimonial.avatar}</div>
+                <img
+  src={testimonial.avatar}
+  alt={testimonial.name}
+  className="w-12 h-12 rounded-full object-cover border-2 border-primary/20 group-hover:border-primary transition"
+/>
                   <div>
                     <p className="font-bold text-foreground group-hover:text-primary transition-colors">
                       {testimonial.name}
