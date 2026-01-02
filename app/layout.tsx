@@ -12,22 +12,9 @@ export const metadata: Metadata = {
   description:
     "Transform your health with personalized fitness coaching. Wellness-focused programs for working professionals and families.",
   icons: {
-    icon: [
-      {
-        url: "/icon.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon.png",
-        media: "(prefers-color-scheme: dark)",
-      }
-      // {
-      //   url: "/icon.svg",
-      //   type: "image/svg+xml",
-      // },
-    ],
+    icon: "/icon.png",
     apple: "/icon.png",
-  },
+  }
 }
 
 export default function RootLayout({
