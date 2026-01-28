@@ -1,6 +1,4 @@
 
-
-```markdown
 # Sura Revamped
 
 🚀 **Sura Revamped** is a modern, responsive web app built with Next.js and TypeScript.  
@@ -38,7 +36,7 @@ To run the project locally:
 1. Clone the repository  
    ```bash
    git clone https://github.com/abhishek09827/sura-revamped.git
-````
+
 
 2. Install dependencies
 
