@@ -22,23 +22,6 @@ It appears to be a redesigned version of a fitness-related UI available at https
 
 ## 🧱 Project Structure
 
-```
-
-.
-├── app/
-├── components/
-├── lib/
-├── public/
-├── scripts/
-├── styles/
-├── .gitignore
-├── next.config.mjs
-├── package.json
-├── tsconfig.json
-└── README.md
-
-````
-
 - **app/** – Application pages and layouts  
 - **components/** – Reusable UI components  
 - **lib/** – Utility functions and helpers  
