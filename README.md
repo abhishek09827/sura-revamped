@@ -4,7 +4,7 @@
 # Sura Revamped
 
 🚀 **Sura Revamped** is a modern, responsive web app built with Next.js and TypeScript.  
-It appears to be a redesigned version of a fitness-related UI available at https://sura-revamped.vercel.app/. :contentReference[oaicite:1]{index=1}
+It is a redesigned version of a fitness-related UI available at https://sura-revamped.vercel.app/
 
 ## 🌟 Features
 
@@ -16,7 +16,7 @@ It appears to be a redesigned version of a fitness-related UI available at https
 
 ## 🔗 Live Demo
 
-👉 https://sura-revamped.vercel.app/ :contentReference[oaicite:2]{index=2}
+👉 https://sura-revamped.vercel.app/ 
 
 ---
 
