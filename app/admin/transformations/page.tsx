@@ -10,7 +10,9 @@ interface Transformation {
   stats: string
   before_image: string
   after_image: string
+  collage_image: string
   duration: string
+  image_type: 'separate' | 'collage'
 }
 
 export default function TransformationsAdmin() {
@@ -23,7 +25,9 @@ export default function TransformationsAdmin() {
     stats: "",
     before_image: "",
     after_image: "",
+    collage_image: "",
     duration: "3 months",
+    image_type: "separate" as 'separate' | 'collage',
   })
 
   useEffect(() => {
@@ -97,7 +101,9 @@ export default function TransformationsAdmin() {
       stats: transformation.stats,
       before_image: transformation.before_image || "",
       after_image: transformation.after_image || "",
+      collage_image: transformation.collage_image || "",
       duration: transformation.duration,
+      image_type: transformation.image_type || "separate",
     })
   }
 
@@ -107,7 +113,9 @@ export default function TransformationsAdmin() {
       stats: "",
       before_image: "",
       after_image: "",
+      collage_image: "",
       duration: "3 months",
+      image_type: "separate",
     })
     setEditingId(null)
     setIsAdding(false)
@@ -191,6 +199,70 @@ export default function TransformationsAdmin() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Image Type</label>
+                <div className="flex gap-6">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="image_type"
+                      value="separate"
+                      checked={formData.image_type === "separate"}
+                      onChange={() => setFormData({ ...formData, image_type: "separate" })}
+                      className="w-4 h-4 text-primary focus:ring-primary"
+                    />
+                    <span className="text-sm text-foreground">Separate Before & After</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="image_type"
+                      value="collage"
+                      checked={formData.image_type === "collage"}
+                      onChange={() => setFormData({ ...formData, image_type: "collage" })}
+                      className="w-4 h-4 text-primary focus:ring-primary"
+                    />
+                    <span className="text-sm text-foreground">Single Collage Image</span>
+                  </label>
+                </div>
+              </div>
+
+              {formData.image_type === "separate" ? (
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">Before Image URL</label>
+                    <input
+                      type="text"
+                      value={formData.before_image}
+                      onChange={(e) => setFormData({ ...formData, before_image: e.target.value })}
+                      className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:border-primary"
+                      placeholder="/person-before.jpg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">After Image URL</label>
+                    <input
+                      type="text"
+                      value={formData.after_image}
+                      onChange={(e) => setFormData({ ...formData, after_image: e.target.value })}
+                      className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:border-primary"
+                      placeholder="/person-after.jpg"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">Collage Image URL</label>
+                  <input
+                    type="text"
+                    value={formData.collage_image}
+                    onChange={(e) => setFormData({ ...formData, collage_image: e.target.value })}
+                    className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:border-primary"
+                    placeholder="/person-collage.jpg"
+                  />
+                </div>
+              )}
+
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={handleSave}
@@ -229,43 +301,53 @@ export default function TransformationsAdmin() {
                 className="bg-card border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all animate-float-up"
               >
                 {/* Before/After Preview */}
-                <div className="relative h-48 grid grid-cols-2">
-                  <img
-                    src={item.before_image || "/placeholder.svg?height=200&width=150&query=fitness-before"}
-                    alt={`${item.name} before`}
-                    className="w-full h-full object-cover"
-                  />
-                  <img
-                    src={item.after_image || "/placeholder.svg?height=200&width=150&query=fitness-after"}
-                    alt={`${item.name} after`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                {item.image_type === "collage" && item.collage_image ? (
+                  <div className="relative h-48">
+                    <img
+                      src={item.collage_image}
+                      alt={`${item.name} collage`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="relative h-48 grid grid-cols-2">
+                    <img
+                      src={item.before_image || "/placeholder.svg?height=200&width=150&query=fitness-before"}
+                      alt={`${item.name} before`}
+                      className="w-full h-full object-cover"
+                    />
+                    <img
+                      src={item.after_image || "/placeholder.svg?height=200&width=150&query=fitness-after"}
+                      alt={`${item.name} after`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
 
-              {/* Content */}
-              <div className="p-4">
-                <h3 className="text-lg font-bold text-foreground">{item.name}</h3>
-                <p className="text-sm text-foreground/60 mb-2">{item.stats}</p>
-                <p className="text-xs text-muted-foreground mb-4">{item.duration} transformation</p>
+                {/* Content */}
+                <div className="p-4">
+                  <h3 className="text-lg font-bold text-foreground">{item.name}</h3>
+                  <p className="text-sm text-foreground/60 mb-2">{item.stats}</p>
+                  <p className="text-xs text-muted-foreground mb-4">{item.duration} transformation</p>
 
-                {/* Actions */}
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="flex-1 px-3 py-2 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item.id)}
-                    className="flex-1 px-3 py-2 bg-red-500/10 text-red-500 rounded-lg text-sm font-medium hover:bg-red-500/20 transition-colors"
-                  >
-                    Delete
-                  </button>
+                  {/* Actions */}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(item)}
+                      className="flex-1 px-3 py-2 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="flex-1 px-3 py-2 bg-red-500/10 text-red-500 rounded-lg text-sm font-medium hover:bg-red-500/20 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
         )}
       </div>

@@ -9,7 +9,9 @@ interface Transformation {
   stats: string
   before_image: string
   after_image: string
+  collage_image: string
   duration: string
+  image_type: 'separate' | 'collage'
 }
 
 export default function GalleryClient({ transformations }: { transformations: Transformation[] }) {
@@ -60,28 +62,38 @@ export default function GalleryClient({ transformations }: { transformations: Tr
                   onMouseLeave={() => setHoveredCard(null)}
                 >
                   <div className="relative rounded-2xl overflow-hidden h-64 shadow-lg group-hover:shadow-2xl group-hover:shadow-primary/30 transition-all duration-300">
-                    <div className="grid grid-cols-2 h-full gap-1 relative">
-                      <div className="relative overflow-hidden group-hover:scale-110 transition-transform duration-500 origin-right">
+                    {item.image_type === "collage" && item.collage_image ? (
+                      <div className="relative overflow-hidden">
                         <img
-                          src={item.before_image || "/placeholder.svg"}
-                          alt={`${item.name} before`}
+                          src={item.collage_image}
+                          alt={`${item.name} collage`}
                           className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-300 flex items-end justify-center pb-2">
-                          <span className="text-xs font-bold text-white/90">Before</span>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 h-full gap-1 relative">
+                        <div className="relative overflow-hidden group-hover:scale-110 transition-transform duration-500 origin-right">
+                          <img
+                            src={item.before_image || "/placeholder.svg"}
+                            alt={`${item.name} before`}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-300 flex items-end justify-center pb-2">
+                            <span className="text-xs font-bold text-white/90">Before</span>
+                          </div>
+                        </div>
+                        <div className="relative overflow-hidden group-hover:scale-110 transition-transform duration-500 origin-left">
+                          <img
+                            src={item.after_image || "/placeholder.svg"}
+                            alt={`${item.name} after`}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-green-900/20 group-hover:bg-green-900/0 transition-colors duration-300 flex items-end justify-center pb-2">
+                            <span className="text-xs font-bold text-white/90">After</span>
+                          </div>
                         </div>
                       </div>
-                      <div className="relative overflow-hidden group-hover:scale-110 transition-transform duration-500 origin-left">
-                        <img
-                          src={item.after_image || "/placeholder.svg"}
-                          alt={`${item.name} after`}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-green-900/20 group-hover:bg-green-900/0 transition-colors duration-300 flex items-end justify-center pb-2">
-                          <span className="text-xs font-bold text-white/90">After</span>
-                        </div>
-                      </div>
-                    </div>
+                    )}
 
                     {hoveredCard === item.id && (
                       <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent flex flex-col items-center justify-end pb-6 animate-float-up">
